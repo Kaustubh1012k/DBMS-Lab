@@ -1,0 +1,49 @@
+11) Implement CRUD operations. SAVE method. Use following Collection.
+Item: Item ID, Item quantity, price, brand, discount
+
+db.Item.insertMany([
+  {
+    Item_ID: 1,
+    Item_quantity: 10,
+    price: 50,
+    brand: "Brand1",
+    discount: 5
+  },
+  {
+    Item_ID: 2,
+    Item_quantity: 20,
+    price: 30,
+    brand: "Brand2",
+    discount: 10
+  },
+  {
+    Item_ID: 3,
+    Item_quantity: 15,
+    price: 40,
+    brand: "Brand1",
+    discount: 7
+  },
+  {
+    Item_ID: 4,
+    Item_quantity: 5,
+    price: 60,
+    brand: "Brand2",
+    discount: 15
+  }
+])
+
+//1. Display the count of item brand wise.
+db.Item.aggregate([
+  {
+    $group: {
+      _id: "$brand",
+      count: { $sum: 1 }
+    }
+  }
+])
+
+//2. Dsiplay item with minimum price.
+db.Item.find().sort({ price: 1 }).limit(1)
+
+//3. Display maximum discount given for item.
+db.Item.find().sort({ discount: -1 }).limit(1)
