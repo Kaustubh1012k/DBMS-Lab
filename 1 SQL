@@ -63,6 +63,11 @@ SHOW INDEX FROM employee;
 7. Showing indices on a table depends on the specific database system you're using. The 
 command might be different for MySQL, PostgreSQL, SQLite, etc. Please let me know which 
 database system you're using for more specific instructions.
+SELECT INDEX_NAME
+FROM USER_INDEXES
+WHERE TABLE_NAME = 'EMPLOYEE';
+
+
 8. Create a user-defined index on any column. Here's an example for MySQL:
 ```sql
 CREATE INDEX idx_salary ON employee (salary);
