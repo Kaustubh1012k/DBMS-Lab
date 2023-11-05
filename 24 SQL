@@ -1,0 +1,102 @@
+24) ) Indexing and join: Consider the relation
+employee (emp_id,e_name,salary ,Date of Joining,Dapt_no,Designation)
+Customer(c_id, c_name , email , city , pincode)Order(order_id , date , amount , cust_id.
+ a. create empid as primary key and indices on table employee.
+ b. create user defined index on any column
+ c. create sequence using auo-increment.
+ d. truncate table.
+ e. find list of customers who placed order and details of their orders.
+ f. find info of customers and append order details to the table/
+ g. list down customers who haven’t placed order.
+To accomplish the tasks you mentioned, we'll work with the "employee," "Customer," and 
+"Order" tables and perform various operations as described:
+a. Create the "employee" table with "emp_id" as the primary key and create indices on the table. 
+We'll also insert 10 values into each of the "employee," "Customer," and "Order" tables:
+```sql
+-- Create the employee table with the primary key and indices
+CREATE TABLE employee (
+ emp_id INT PRIMARY KEY,
+ e_name VARCHAR(50),
+ salary DECIMAL(10, 2),
+ Date_of_Joining DATE,
+ Dept_no INT,
+ Designation VARCHAR(50)
+);
+-- Create an index on the salary column
+CREATE INDEX idx_salary ON employee(salary);
+-- Insert 10 values into the employee table
+INSERT INTO employee (emp_id, e_name, salary, Date_of_Joining, Dept_no, Designation)
+VALUES
+ (1, 'John Doe', 60000.00, '2022-01-15', 101, 'Manager'),
+ (2, 'Jane Smith', 55000.00, '2021-11-10', 102, 'Marketing');
+ -- Add more records as needed.
+-- Create the Customer table and insert 10 values
+CREATE TABLE Customer (
+ c_id INT PRIMARY KEY,
+ c_name VARCHAR(50),
+ email VARCHAR(100),
+ city VARCHAR(50),
+ pincode VARCHAR(10)
+);
+-- Insert 10 values into the Customer table
+INSERT INTO Customer (c_id, c_name, email, city, pincode)
+VALUES
+ (1, 'Alice Brown', 'alice@example.com', 'New York', '10001'),
+ (2, 'Bob Johnson', 'bob@example.com', 'Los Angeles', '90001');
+ -- Add more records as needed.
+-- Create the Order table and insert 10 values
+CREATE TABLE cust_order (
+ order_id INT PRIMARY KEY,
+ date DATE,
+ amount DECIMAL(10, 2),
+ cust_id INT
+);
+-- Insert 10 values into the Order table
+INSERT INTO cust_order (order_id, date, amount, cust_id)
+VALUES
+ (1, '2022-01-01', 100.00, 1),
+ (2, '2022-01-02', 150.00, 2);
+ -- Add more records as needed.
+```
+b. Create a user-defined index on any column, for example, we'll create an index on the "email" 
+column in the "Customer" table:
+```sql
+CREATE INDEX idx_email ON Customer(email);
+```
+c. Create a sequence using auto-increment:
+You can create a sequence for generating unique IDs. The specific SQL for creating a sequence 
+may vary depending on the database system you are using. Here's an example using PostgreSQL:
+```sql
+ALTER TABLE Customer
+MODIFY c_id INT AUTO_INCREMENT;```
+d. Truncate a table. You can use the `TRUNCATE` statement to remove all rows from a table 
+without deleting the table itself. For example:
+```sql
+TRUNCATE TABLE employee;
+```
+e. Find a list of customers who placed orders and details of their orders:
+```sql
+SELECT c.c_name, o.order_id, o.date, o.amount
+FROM customer c
+INNER JOIN cust_order o ON c.c_id = o.cust_id;
+```
+f. Find info of customers and append order details to the table:
+You can't directly append order details to the Customer table because the Customer table and the 
+Order table have a one-to-many relationship. However, you can retrieve the data together in a 
+query, or you can create a new table to store the combined data if needed.
+Here's how to retrieve the data in a query:
+```sql
+CREATE TABLE customer_order_info AS
+SELECT c.c_name, c.email, c.city, c.pincode, o.order_id, o.date, o.amount
+FROM customer c
+LEFT JOIN cust_order o ON c.c_id = o.cust_id;
+```
+g. List down customers who haven't placed orders:
+```sql
+SELECT c.c_name, c.email
+FROM customer c
+LEFT JOIN cust_order o ON c.c_id = o.cust_id
+WHERE o.cust_id IS NULL;
+```
+This query will return customers who haven't placed orders because we use a LEFT JOIN and 
+check for cases where the order_id is NULL, indicating no matching order for the customer.
